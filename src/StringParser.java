@@ -1,8 +1,15 @@
+import java.util.regex.*;
+
 public class StringParser {
-    public int[] GetArray(String s1){
+    public int[] GetArray(String s1) throws Exception {
         int count = 0;
         int firstnum = 0;
         int endnum = 0;
+
+        CheckExpression(s1);
+        if(s1.indexOf(".") >= 0 || s1.indexOf(",") >= 0){
+            throw new Exception("Необходимо вводить только целые числа");
+        }
 
         for (int i = 0; i < s1.length(); i++) {
             if (s1.charAt(i) == ' ') {
@@ -68,6 +75,15 @@ public class StringParser {
         return arr;
     }
 
+    private void CheckExpression(String s){
+        Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
+        Matcher matcher = pat.matcher(s);
+        if ((s.indexOf("I") >= 0 || s.indexOf("V") >= 0 || s.indexOf("X") >= 0)
+        && matcher.find()){
+            throw new ClassCastException("Нельзя вводить одновременно арабские и римские цифры");
+        }
+    }
+
     private int ConvertToInt(String s) throws Exception {
         RTI rti = new RTI();
         boolean bool = false;
@@ -79,6 +95,8 @@ public class StringParser {
         }else{
             bool = true;
             for (int i = 0; i < s1.length(); i++){
+
+
                 if(Character.isDigit(s1.charAt(i))){
                     continue;
                 }else{
@@ -89,12 +107,12 @@ public class StringParser {
             if(bool){
                 return Integer.parseInt(s1);
             }else {
-                throw new Exception("Entered data do not contain expressions");
+                throw new Exception("Введенные данные не содержат выражений");
             }
         }
     }
 
-    private boolean IsItRoman(String roman){
-        return roman.indexOf("I")>=0 || roman.indexOf("V")>=0 || roman.indexOf("M")>=0 || roman.indexOf("i")>=0 || roman.indexOf("v")>=0 || roman.indexOf("m")>=0;
+    public boolean IsItRoman(String roman){
+        return roman.indexOf("X")>=0 || roman.indexOf("I")>=0 || roman.indexOf("V")>=0 || roman.indexOf("M")>=0 || roman.indexOf("i")>=0 || roman.indexOf("v")>=0 || roman.indexOf("m")>=0 || roman.indexOf("x")>=0;
     }
 }
